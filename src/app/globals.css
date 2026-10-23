@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* EcoShield design tokens: warm paper, deep forest green, water blue. Text pairs meet WCAG AA. */
+@theme {
+  --color-paper: #f6f4ee;
+  --color-card: #ffffff;
+  --color-tint: #edeadf;
+  --color-tint2: #e2ded0;
+  --color-line: #d9d4c5;
+  --color-ink: #10211b;
+  --color-muted: #55665f;
+  --color-brand: #0f6b4c;
+  --color-brand-dark: #0a4a35;
+  --color-brand-soft: #dcefe5;
+  --color-water: #2f7fc1;
+  --color-risk-high: #c62828;
+  --color-risk-med: #9a4a07;
+  --color-risk-low: #137536;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --radius-card: 16px;
+}
+
+html { color-scheme: light; }
+body {
+  background:
+    radial-gradient(900px 480px at 90% -8%, rgba(15, 107, 76, 0.10), transparent 60%),
+    radial-gradient(700px 420px at -10% 20%, rgba(47, 127, 193, 0.08), transparent 60%),
+    var(--color-paper);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes flow { to { stroke-dashoffset: -40; } }
+@keyframes pulseRing { 0% { opacity: .9; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.fade-up { animation: fadeUp .6s ease-out both; }
+.flow { stroke-dasharray: 10 10; animation: flow 1.6s linear infinite; }
+.ring { transform-box: fill-box; transform-origin: center; animation: pulseRing 1.8s ease-out infinite; }
+.floaty { animation: floaty 4s ease-in-out infinite; }
+
+/* Interactive polish: cursor spotlight on cards, growing bars, shimmer, scroll reveal. */
+[data-spotlight] { position: relative; }
+[data-spotlight]::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(15, 107, 76, 0.13), transparent 65%);
+}
+[data-spotlight]:hover::before { opacity: 1; }
+@keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.bar-grow { transform-box: fill-box; transform-origin: bottom; animation: grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes shimmer { to { background-position: 200% 0; } }
+.shimmer {
+  background-image: linear-gradient(90deg, #0f6b4c, #1f6aa5, #0f6b4c); background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 7s linear infinite;
+}
+@keyframes reveal { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  [data-reveal] { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+}
+
+/* In-app display preferences (Profile > Settings) */
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after { animation: none !important; transition: none !important; }
+html[data-size="large"] { font-size: 112.5%; }
